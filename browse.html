@@ -108,6 +108,16 @@
         const res = await fetch('catalog/brokers.json');
         const data = await res.json();
         brokers = data.brokers.filter(b => b.active !== false);
+        // A stored checklist can outlive the catalog: ids get renamed or
+        // delisted. Counting ids that no longer exist inflates progress past
+        // 100% (one stale id plus one real row rendered as "2 / 1"), so keep
+        // only the ids this catalog still contains.
+        const liveIds = new Set(brokers.map(b => b.id));
+        const pruned = [...removed].filter(id => liveIds.has(id));
+        if (pruned.length !== removed.size) {
+          removed = new Set(pruned);
+          localStorage.setItem('doxhund_removed', JSON.stringify(pruned));
+        }
         render();
       } catch (err) {
         document.getElementById('directory').innerHTML =
