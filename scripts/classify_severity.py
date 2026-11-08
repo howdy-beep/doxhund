@@ -26,8 +26,35 @@ def norm(s: str) -> str:
     return re.sub(r"[^a-z0-9]", "", s.lower())
 
 
+# A keyword shorter than this is too generic to match as a substring: "tree"
+# appears inside "street", "home" inside "homepage", "job" inside "jobsboard".
+# Short keywords are matched against whole tokens instead.
+SHORT_KEYWORD_MAX = 4
+
+
+def tokens(*parts: str) -> set:
+    """Every alphanumeric token, plus each part joined, so multi-word keywords
+    like "familytreenow" can still match a two-word name."""
+    out = set()
+    for part in parts:
+        for tok in re.split(r"[^a-z0-9]+", (part or "").lower()):
+            if tok:
+                out.add(tok)
+        joined = re.sub(r"[^a-z0-9]+", "", (part or "").lower())
+        if joined:
+            out.add(joined)
+    return out
+
+
+def matches(keyword: str, haystack: str, toks: set) -> bool:
+    if len(keyword) > SHORT_KEYWORD_MAX:
+        return keyword in haystack
+    return keyword in toks
+
+
 def classify(name: str, opt: str, search: str) -> str:
     hay = norm(name) + " " + norm(opt or "") + " " + norm(search or "")
+    toks = tokens(name, opt, search)
 
     # Specialized buckets (most specific first).
     relatives = [
@@ -59,19 +86,19 @@ def classify(name: str, opt: str, search: str) -> str:
     ]
 
     for kw in relatives:
-        if kw in hay:
+        if matches(kw, hay, toks):
             return "relatives"
     for kw in employment:
-        if kw in hay:
+        if matches(kw, hay, toks):
             return "employment"
     for kw in phone:
-        if kw in hay:
+        if matches(kw, hay, toks):
             return "phone"
     for kw in social:
-        if kw in hay:
+        if matches(kw, hay, toks):
             return "social"
     for kw in address:
-        if kw in hay:
+        if matches(kw, hay, toks):
             return "address"
 
     # Default: generalist people-search.
@@ -91,7 +118,10 @@ def main() -> None:
         dist[b["leak_severity"]] += 1
 
     with open(PATH, "w") as f:
+        # Trailing newline keeps the file byte-identical to what the rest of
+        # the repo writes, so a rerun does not show up as a spurious diff.
         json.dump(data, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
     print("leak_severity distribution:")
     order = ["address", "phone", "relatives", "employment", "social"]
