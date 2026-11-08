@@ -1,0 +1,27 @@
+# Reviewers by path.
+#
+# Only GitHub accounts with write access to this repository can be listed here;
+# entries for outside accounts produce errors on every pull request.
+#
+# `main` currently has no branch protection, so this file documents intent
+# rather than enforcing it. Pair it with a protection rule or ruleset to make
+# the review requirement real.
+#
+# Once additional maintainers have write access, add them to the relevant line,
+# for example:  /catalog/  @howdy-beep  @new-maintainer
+
+*                       @howdy-beep
+
+# Dataset: a bad row sends every visitor to the wrong place.
+/catalog/               @howdy-beep
+
+# Anything that parses or normalises catalog input.
+/scripts/               @howdy-beep
+/engine/                @howdy-beep
+
+# Copy and claims: privacy statements must describe shipped behaviour.
+/index.html             @howdy-beep
+/guide.html             @howdy-beep
+
+# Security policy changes are reviewed by the owner.
+/SECURITY.md            @howdy-beep
