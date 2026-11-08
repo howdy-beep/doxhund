@@ -78,6 +78,22 @@
     const priorityEl = document.getElementById('priority');
     const listEl = document.getElementById('list');
 
+    // A mailto: link is only correct when the `contact` field is an address
+    // and nothing else. Some rows carry prose ("see their support page"), and
+    // some carry several addresses; prose must never become a recipient.
+    const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+
+    function contactEmail(contact) {
+      // Collapse stray whitespace around the @ ("support@ example.com") first;
+      // it is a data-entry artifact, not prose.
+      const raw = String(contact || '').trim().replace(/\s*@\s*/g, '@');
+      if (!raw) return '';
+      const emails = raw.match(EMAIL_RE) || [];
+      if (!emails.length) return '';
+      const residue = raw.replace(EMAIL_RE, '').replace(/[,;\/|\s]+/g, '');
+      return residue ? '' : emails.join(',');
+    }
+
     function methodLabel(m) {
       return { web_form:'web form', email:'email', fax:'fax', phone:'phone' }[m] || m || 'web form';
     }
@@ -127,10 +143,10 @@
         a.rel = 'noopener noreferrer';
         a.textContent = 'Remove →';
         row.appendChild(a);
-      } else if (b.contact && b.contact.includes('@')) {
+      } else if (contactEmail(b.contact)) {
         const a = document.createElement('a');
         a.className = 'btn alt';
-        a.href = 'mailto:' + b.contact;
+        a.href = 'mailto:' + contactEmail(b.contact);
         a.textContent = 'Email';
         row.appendChild(a);
       } else {
@@ -158,7 +174,9 @@
     async function init() {
       const res = await fetch('catalog/brokers.json');
       const data = await res.json();
-      const brokers = data.brokers || [];
+      // Inactive rows are delisted on purpose (dead site, withdrawn opt-out).
+      // Showing them as actionable sends people to a link that cannot work.
+      const brokers = (data.brokers || []).filter(b => b.active !== false);
 
       const pri = [], actionable = [], longtail = [];
       for (const b of brokers) {
