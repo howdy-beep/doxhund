@@ -12,6 +12,8 @@ const {
   decrypt,
   deriveKey,
   PBKDF2_ITERATIONS,
+  MIN_ITERATIONS,
+  MAX_ITERATIONS,
 } = require("./vault.js");
 
 test("encrypt -> decrypt round-trips to the original plaintext", async () => {
@@ -79,4 +81,56 @@ test("deriveKey produces a 256-bit AES-GCM key for a fixed salt", async () => {
   );
   const raw = await crypto.subtle.exportKey("raw", extractable);
   assert.strictEqual(raw.byteLength, 32, "256-bit AES-GCM key = 32 bytes");
+});
+
+test("empty password is refused on encrypt and decrypt", async () => {
+  await assert.rejects(encrypt("secret data", ""), /non-empty password/);
+  const envelope = await encrypt("secret data", "right-password");
+  await assert.rejects(decrypt(envelope, ""), /non-empty password/);
+});
+
+test("decrypt derives with the iteration count stored in the envelope", async () => {
+  // Build an envelope by hand at a non-default iteration count. If decrypt
+  // ignored envelope.iterations and used the module default, the derived key
+  // would differ and AES-GCM authentication would fail here.
+  const iterations = MIN_ITERATIONS;
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey("envelope-password", salt, iterations);
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    key,
+    new TextEncoder().encode("derived at " + iterations)
+  );
+  const envelope = {
+    kdf: "PBKDF2-SHA256",
+    iterations,
+    alg: "AES-256-GCM",
+    salt: Buffer.from(salt).toString("base64"),
+    iv: Buffer.from(iv).toString("base64"),
+    ciphertext: Buffer.from(ciphertext).toString("base64"),
+  };
+  assert.strictEqual(await decrypt(envelope, "envelope-password"), "derived at " + iterations);
+
+  // Editing the declared count must break authentication, proving the field
+  // is load-bearing rather than decorative metadata.
+  await assert.rejects(decrypt({ ...envelope, iterations: iterations * 2 }, "envelope-password"));
+});
+
+test("envelopes declaring an unsupported cipher, KDF or iteration count are refused", async () => {
+  const envelope = await encrypt("secret data", "right-password");
+
+  await assert.rejects(decrypt({ ...envelope, alg: "AES-128-CBC" }, "right-password"), /unsupported cipher/);
+  await assert.rejects(decrypt({ ...envelope, kdf: "scrypt" }, "right-password"), /unsupported KDF/);
+  await assert.rejects(decrypt({ ...envelope, iterations: undefined }, "right-password"), /iteration count/);
+  await assert.rejects(decrypt({ ...envelope, iterations: 1000 }, "right-password"), /iteration count/);
+  await assert.rejects(decrypt({ ...envelope, iterations: MAX_ITERATIONS + 1 }, "right-password"), /iteration count/);
+  await assert.rejects(decrypt({ ...envelope, iterations: 600000.5 }, "right-password"), /iteration count/);
+});
+
+test("envelopes missing a base64 field are refused with a specific error", async () => {
+  const envelope = await encrypt("secret data", "right-password");
+  await assert.rejects(decrypt({ ...envelope, iv: "" }, "right-password"), /missing iv/);
+  await assert.rejects(decrypt({ ...envelope, salt: undefined }, "right-password"), /missing salt/);
+  await assert.rejects(decrypt(null, "right-password"), /must be an object/);
 });

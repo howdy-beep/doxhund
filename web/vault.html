@@ -48,10 +48,17 @@
     document.getElementById("enc").addEventListener("click", async () => {
       const pw = document.getElementById("pw").value;
       const profile = document.getElementById("profile").value;
-      envelope = await DoxVault.encrypt(profile, pw);
-      out.textContent = "Ciphertext envelope (safe to store / send):\n\n" + JSON.stringify(envelope, null, 2);
-      status.textContent = "✔ Encrypted. Plaintext is not present in the output.";
-      status.className = "ok";
+      try {
+        envelope = await DoxVault.encrypt(profile, pw);
+        out.textContent = "Ciphertext envelope (safe to store / send):\n\n" + JSON.stringify(envelope, null, 2);
+        status.textContent = "✔ Encrypted. Plaintext is not present in the output.";
+        status.className = "ok";
+      } catch (e) {
+        envelope = null;
+        out.textContent = "—";
+        status.textContent = "✘ " + e.message;
+        status.className = "bad";
+      }
     });
 
     document.getElementById("dec").addEventListener("click", async () => {
