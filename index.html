@@ -5,28 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doxhund — Hunt Down & Delete Your Public Records</title>
   <meta name="description" content="Doxhund is a free, manual-first privacy tool: a curated directory of 349 data brokers with one-click opt-out links. No accounts, no signup, nothing stored.">
-
-  <!-- Tailwind Play CDN for zero-build static deployment (dev convenience;
-       swap for a production build before launch). -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              purple: '#9333ea',
-              dark: '#0a0a0c',
-              card: '#121216',
-              border: '#1f1f28',
-              accent: '#a855f7'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="styles.css">
+  
   <style>
     @keyframes radar-sweep {
       0% { transform: rotate(0deg); }
@@ -156,8 +136,8 @@
       </div>
       <div class="flex gap-4">
         <a href="https://github.com/howdy-beep/doxhund" class="hover:text-zinc-400">GitHub</a>
-        <a href="#" class="hover:text-zinc-400">Privacy Policy</a>
-        <a href="#" class="hover:text-zinc-400">CCPA Compliance</a>
+        <a href="privacy.html" class="hover:text-zinc-400">Privacy Policy</a>
+        <a href="privacy.html#ccpa" class="hover:text-zinc-400">CCPA Compliance</a>
       </div>
     </div>
   </footer>

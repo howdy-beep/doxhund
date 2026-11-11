@@ -15,6 +15,11 @@ No build step. Serve the repo root over HTTP (`fetch()` needs http, not file://)
 Every page is plain HTML + inline JS + `catalog/brokers.json`. Edit a file,
 refresh — that's the whole loop.
 
+Styling is pre-compiled into `styles.css` (self-hosted, no CDN). If you change
+Tailwind classes, rebuild it and commit the result:
+
+    npx tailwindcss@3 -i ./input.css -o ./styles.css --minify --content "./*.html"
+
 ## Run the recon engine (demo mode)
 
     cd doxhund
