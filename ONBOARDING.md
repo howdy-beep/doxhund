@@ -131,7 +131,7 @@ live site serves stale HTML and ignores new pushes.
 ## Repo
 
 - Remote: https://github.com/howdy-beep/doxhund
-- Local: `/Users/abdul/hermes/apps/doxhund`
+- Local: `~/hermes/apps/doxhund`
 
 ## Where to help first
 
