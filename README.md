@@ -48,11 +48,13 @@ Three surfaces, all free, all zero-storage:
 ## The catalog
 
 `catalog/brokers.json` holds **349 brokers** (343 active; 6 deactivated dead
-or malware sites). Key fields:
+or malware sites) plus **4 official public-records sources** (Iowa court,
+sex-offender, DOC offender, and VINE lookups; `category: public_records`).
+Key fields:
 
 | Field | Meaning | Coverage |
 |---|---|---|
-| `leak_severity` | what the site exposes (address / phone / relatives / employment / social) | 349/349 |
+| `leak_severity` | what the site exposes (address / phone / relatives / employment / social / records) | 353/353 |
 | `search_url_template` | pre-fillable name-search URL (powers "Search Yourself") | 25 |
 | `opt_out_url` | direct removal link | 276 (79%) |
 | `request_method` | web_form / email / fax / unknown / none | 349/349 |

@@ -50,8 +50,12 @@ How to run the static site + the recon engine locally:
   pattern loads real results for a fictional name, then add it. A 404
   template is worse than a missing one.
 - `leak_severity` is one of: `address`, `phone`, `relatives`, `employment`,
-  `social`. Re-run `scripts/classify_severity.py` after bulk edits to
-  regenerate it.
+  `social`, `records`. `records` marks an official government public-records
+  source (court, criminal, sex-offender, offender/custody lookups): these have
+  `category: public_records`, `recon_supported: true`, and an empty
+  `opt_out_url` — they cannot be removed by opt-out (expungement/sealing is a
+  court action, not a deletion request). Re-run `scripts/classify_severity.py`
+  after bulk edits to regenerate it.
 - `request_method` is one of `web_form` / `email` / `fax` / `unknown` / `none`.
   `contact` holds raw (possibly multiple) removal email(s); `opt_out_email` is
   the curated single address the wizard uses — leave it empty to fall back to

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Doxhund — Iowa Public Records</title>
+<meta name="description" content="Official Iowa public records lookups: court docket, sex offender registry, DOC offender search, and VINE custody status. Free, nothing stored.">
+<style>
+:root{--bg:#0a0a0c;--card:#121216;--border:#27272a;--fg:#e4e4e7;--muted:#a1a1aa;--accent:#7c3aed}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:36px 20px 90px}
+h1{font-size:1.7rem;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 24px;line-height:1.5}
+.back{margin-bottom:20px}
+.section-title{font-size:1.05rem;font-weight:650;margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.card .n{font-weight:600;margin-bottom:2px}
+.card .d{color:var(--muted);font-size:.82rem;margin-bottom:2px}
+.card .w{color:var(--muted);font-size:.85rem;line-height:1.5;margin-bottom:12px}
+.card .l{display:flex;flex-wrap:wrap;gap:8px}
+a.btn{text-decoration:none;font-size:.82rem;font-weight:600;padding:8px 14px;border-radius:8px;background:var(--accent);color:#fff}
+a.btn.alt{background:var(--card);border:1px solid var(--border);color:var(--fg)}
+.notice{background:#1c1008;border:1px solid #78350f;border-radius:10px;padding:14px 16px;margin:20px 0}
+.notice h3{margin:0 0 6px;font-size:.92rem;color:#fbbf24}
+.notice p{margin:0;color:#fcd9a3;font-size:.86rem;line-height:1.55}
+.note{color:var(--muted);font-size:.85rem;line-height:1.55}
+.foot{color:var(--muted);font-size:.76rem;margin-top:34px;line-height:1.6}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="back"><a href="browse.html">← Back to the full directory</a></p>
+  <h1>hey kyle</h1>
+  <p class="sub">Official government lookups for court cases, criminal records, offenders, and custody status in Iowa. These are <strong>public records</strong>, not data brokers, so they can't be deleted with an opt-out form.</p>
+
+  <div class="notice">
+    <h3>⚠️ Removal here works differently</h3>
+    <p>Data brokers let you submit a deletion request. Court and criminal records don't, because they're public by law. To remove one you generally need <strong>expungement or sealing</strong> through the Iowa courts, which is a legal process, not a click. These links are for checking what's publicly out there, not removing it.</p>
+  </div>
+
+  <div class="section-title">Official Iowa lookups</div>
+
+  <div class="card">
+    <div class="n">Iowa Courts Online</div>
+    <div class="d">iowacourts.state.ia.us · Iowa Judicial Branch</div>
+    <div class="w">Free public docket of Iowa state court cases. Search by party name, case number, or attorney. Full case documents are viewed at a courthouse terminal in the county where the case was filed.</div>
+    <div class="l"><a class="btn" href="https://www.iowacourts.state.ia.us/" target="_blank" rel="noopener noreferrer">Search court docket</a></div>
+  </div>
+
+  <div class="card">
+    <div class="n">Iowa Sex Offender Registry</div>
+    <div class="d">iowasexoffender.gov · Iowa Department of Public Safety</div>
+    <div class="w">Registered sex offenders in Iowa. Search by name, city, or map. You'll be asked to accept a short user agreement before the search loads.</div>
+    <div class="l"><a class="btn" href="https://www.iowasexoffender.gov/search/basicsearch" target="_blank" rel="noopener noreferrer">Search registry</a></div>
+  </div>
+
+  <div class="card">
+    <div class="n">Iowa DOC Offender Search</div>
+    <div class="d">doc-search.iowa.gov · Iowa Department of Corrections</div>
+    <div class="w">Locates people currently or previously in Iowa <em>state prisons</em> (not county jails). Search by name or offender number.</div>
+    <div class="l"><a class="btn" href="https://doc-search.iowa.gov/Offender/Search" target="_blank" rel="noopener noreferrer">Search offenders</a></div>
+  </div>
+
+  <div class="card">
+    <div class="n">Iowa VINELink</div>
+    <div class="d">vinelink.vineapps.com/state/IA · Iowa VINE</div>
+    <div class="w">Custody status and criminal case information. Free, and you can register for automated notifications when a person's custody status changes.</div>
+    <div class="l"><a class="btn" href="https://vinelink.vineapps.com/state/IA" target="_blank" rel="noopener noreferrer">Check custody status</a></div>
+  </div>
+
+  <div class="section-title">What these don't cover</div>
+  <p class="note">These four cover state-level records. <strong>County</strong> records (sheriff booking logs, county jail rosters, and county-level court dockets) are held separately by each of Iowa's 99 counties and aren't aggregated here. A full Iowa criminal-history check (name plus date of birth, all counties) costs $15 via the <a href="https://dps.iowa.gov/divisions-iowa-department-public-safety/iowa-division-criminal-investigation/criminal-history-record-check-information" target="_blank" rel="noopener noreferrer">Iowa DCI</a> and is done by paper form, not a website search.</p>
+
+  <p class="foot">These are official Iowa government sources, verified November 2026. Free and open source: <a href="https://github.com/howdy-beep/doxhund" target="_blank" rel="noopener noreferrer">github.com/howdy-beep/doxhund</a>.</p>
+</div>
+</body>
+</html>
